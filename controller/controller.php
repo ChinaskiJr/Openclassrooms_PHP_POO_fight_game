@@ -1,4 +1,6 @@
 <?php 
+use \OpenClassrooms\Mini_fight_game\Classes\Character as Character;
+use \OpenClassrooms\Mini_fight_game\Model\CharacterManager as CharacterManager;
 //AUTOLOADER
 /**
  * Auto-loader for classes
@@ -18,13 +20,24 @@ function autoload($class) {
 		} elseif (file_exists('classes/' . $class . '.php')) {
 			require_once('classes/' . $class . '.php');
 		} else  {
-			trigger_error('Unable to find the class', E_USER_WARNING);
+			throw new Exception('Unable to find the class');
 		}
 }
 spl_autoload_register('autoload');
 
 /**
- * Send an array that contains a character's attributes
+ * Insert a Character object into the database // ADD THE CONTROL
+ *
+ * @param Character $charac The object to insert to the database
+ *
+ * @return void
+ */
+function newCharacter(Character $charac) {
+	$characterManager = new CharacterManager();
+	$newCharacter = $characterManager->addCharacter($charac);
+}
+/**
+ * Send an array that contains a character's attributes 
  * 
  * From Model getCharacterAttributesFromDb() 
  * to View displayCharacterAttribute.php
@@ -34,9 +47,8 @@ spl_autoload_register('autoload');
  * @return void
  */
 function sendCharacterAttributesToTheView($characterId) {
-	$characterManager = new \Openclassrooms\Mini_fight_game\Model\CharacterManager();
+	$characterManager = new CharacterManager();
 	$characterAttributes = $characterManager->getCharacterAttributes($characterId);
-	$character = new \Openclassrooms\Mini_fight_game\Classes\Character($characterAttributes);
+	$character = new Character($characterAttributes);
 	require_once('view/frontend/displayCharacterAttribute.php');
 }
-

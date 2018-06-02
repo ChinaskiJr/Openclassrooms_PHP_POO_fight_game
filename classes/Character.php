@@ -83,7 +83,7 @@ class Character {
 	public function setId($id) {
 		$id = (int) $id; 
 		if ($id <= 0) {
-			trigger_error('The id must be strictly positive', E_USER_WARNING);
+			throw new Exception('The id must be strictly positive'));
 		}
 		$this->_id = $id;
 	}
@@ -94,10 +94,10 @@ class Character {
 	 */
 	public function setName($name) {
 		if (!is_string($name)) {
-			trigger_error('The name must be a string', E_USER_WARNING);
+			throw new Exception('The name must be a string'));
 		}
 		if (strlen($name) > 30) {
-			trigger_error('The name\'s lenght must be lower than 30 characters', E_USER_WARNING);
+			throw new Exception('The name\'s lenght must be lower than 30 characters'));
 		}
 		$this->_name = $name;
 	}
@@ -113,7 +113,7 @@ class Character {
 	public function setStrenght($strenght) {
 		$strenght = (int)$strenght; 
 		if ($strenght < 0 || $strenght > 100) {
-			trigger_error('The strenght must be included between 0 and 100', E_USER_WARNING);
+			throw new Exception('The strenght must be included between 0 and 100'));
 		}
 		$this->_strenght = $strenght;
 	}
@@ -129,7 +129,7 @@ class Character {
 	public function setDamages($damages) {
 		$damages = (int) $damages; 
 		if ($damages < 0 || $damages > 100) {
-			trigger_error('The damages must be included between 0 and 100', E_USER_WARNING);
+			throw new Exception('The damages must be included between 0 and 100'));
 		}
 		$this->_damages = $damages;
 	}
@@ -145,7 +145,7 @@ class Character {
 	public function setLevel($level) {
 		$level = (int) $level; 
 		if ($level < 0 || $level > 100) {
-			trigger_error('The level must be included between 0 and 100', E_USER_WARNING);
+			throw new Exception('The level must be included between 0 and 100'));
 		}
 		$this->_level = $level;
 	}
@@ -161,7 +161,7 @@ class Character {
 	public function setExperience($experience) {
 		$experience = (int) $experience; 
 		if ($experience < 0 || $experience > 100) {
-			trigger_error('The experience must be included between 0 and 100', E_USER_WARNING);
+			throw new Exception('The experience must be included between 0 and 100'));
 		}
 		$this->_experience = $experience;
 	}
