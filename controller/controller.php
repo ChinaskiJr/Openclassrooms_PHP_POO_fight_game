@@ -38,7 +38,7 @@ spl_autoload_register('autoload');
  */
 function newCharacter(Character $charac) {
 	$characterManager = new CharacterManager();
-	$characterManager->addCharacter($charac);
+	$characterManager->ad($charac);
 	require_once('view/frontend/displayNewCharacter.php');
 }
 /**
@@ -52,7 +52,7 @@ function newCharacter(Character $charac) {
  */
 function eraseCharacter(Character $charac) {
 	$characterManager = new CharacterManager();
-	$characterManager->deleteCharacter($charac);
+	$characterManager->delet($charac);
 	require_once('view/frontend/displayErasedCharacter.php');
 }
 /**
@@ -73,7 +73,7 @@ function sendCharacterAttributesToTheView($characterId) {
 		throw new Exception('The character doesn\'t exist');
 	}
 	$characterManager = new CharacterManager();
-	$characterAttributes = $characterManager->getCharacterAttributes($characterId);
+	$characterAttributes = $characterManager->getCharacter($characterId);
 	$character = new Character($characterAttributes);
 	if (!is_a($character, '\OpenClassrooms\Mini_fight_game\Classes\Character')) {
 		throw new Exception('Issue with the database : getCharacterAttributes() method');
@@ -95,7 +95,7 @@ function getCharacterObject($characterId) {
 		throw new Exception('The character doesn\'t exist');
 	}
 	$characterManager = new CharacterManager();
-	$characterObject = $characterManager->getCharacter($characterId);
+	$characterObject = $characterManager->ge($characterId);
 	if (!is_a($characterObject, '\OpenClassrooms\Mini_fight_game\Classes\Character')) {
 		throw new Exception('Issue with the database : getCharacter() method');
 		}
@@ -107,11 +107,11 @@ function getCharacterObject($characterId) {
  * Control if the output is an array and 
  * if it is full of Character objects.
  * 
- * @return array $characterAttributes An aray with all character's data.
+ * @return array $characterAttributes An aray of objects with all character's data.
  */
 function getAllCharacters() {
 	$characterManager = new CharacterManager();
-	$charactersAttributes = $characterManager->getAllCharacters();
+	$charactersAttributes = $characterManager->getAll();
 	if (!is_array($charactersAttributes)) {
 		throw new Exception('Issue with the database : getAllCharacters() method. It returns no array');
 	}
@@ -121,4 +121,59 @@ function getAllCharacters() {
 		} 
 	}
 	return $charactersAttributes;
+}
+/**
+ * Return an array that contains objects of all characters except one.
+ * 
+ * Control if the output is an array and 
+ * if it is full of Character objects.
+ * 
+ * @param string $name The Character to ommit.
+ * 
+ * @return array $characterAttributes An aray of objects with all character's data.
+ */
+function getAllCharactersExcept($name) {
+	$characterManager = new CharacterManager();
+	if (!is_string($name)) {
+		throw new Exception('getAllCharactersExcept : $name must be a string');
+	}
+	$charactersAttributes = $characterManager->getAllExcept($name);
+	if (!is_array($charactersAttributes)) {
+		throw new Exception('Issue with the database : getAllCharacters() method. It returns no array');
+	}
+	foreach ($charactersAttributes as $key => $value) {
+		if (!is_a($value, '\OpenClassrooms\Mini_fight_game\Classes\Character')) {
+			throw new Exception('Issue with the database : getAllCharacters() method. Not all values of the array are Character objects.');
+		} 
+	}
+	return $charactersAttributes;
+}
+/**
+ * Transtype $numberOfCharacters into an integer
+ * 
+ * @return int type
+ */
+function countCharacters() {
+	$characterManager = new CharacterManager();
+	$numberOfCharacters = $characterManager->count();
+	if(!is_int($numberOfCharacters)) {
+		throw new Exception('count() method from Character did not return an interger');
+	}
+	return $numberOfCharacters;
+}
+/**
+ * Control that the param is a string or an integer
+ * 
+ * @param int or string $info The id of the character or his name (case sensitive).
+
+ * @return bool $exists TRUE if exists and FALSE if not. 
+ */
+function isCharacterExist($info) {
+	$characterManager = new CharacterManager();
+	if (!is_int($info) && !is_string($info)) {
+		throw new Exception('function isCharacterExist() : $info must be a string or an integer');
+	}
+	$characterExist = $characterManager->exists($info);
+
+	return $characterExist;
 }

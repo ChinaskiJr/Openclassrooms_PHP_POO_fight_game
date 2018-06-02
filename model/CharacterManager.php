@@ -13,7 +13,7 @@ class CharacterManager extends \OpenClassrooms\Mini_fight_game\Model\Manager {
 	 * 
 	 * @return void;
 	 */
-	public function addCharacter(Character $charac) {
+	public function add(Character $charac) {
 		$db = $this->dbConnect();
 		$request = $db->prepare('INSERT INTO game_characters (name, strenght, damages, level, experience) VALUES (:name, :strenght, :damages, :level, :experience)');
 		$request->bindValue(':name', $charac->name(), \PDO::PARAM_STR);
@@ -31,7 +31,7 @@ class CharacterManager extends \OpenClassrooms\Mini_fight_game\Model\Manager {
 	 * 
 	 * @return void
 	 */
-	public function deleteCharacter(Character $charac) {
+	public function delete(Character $charac) {
 		$db = $this->dbConnect();
 		$request = $db->prepare('DELETE FROM game_characters WHERE id = :id');
 		$request->bindValue(':id', $charac->id(), \PDO::PARAM_INT);
@@ -45,7 +45,7 @@ class CharacterManager extends \OpenClassrooms\Mini_fight_game\Model\Manager {
 	 * 
 	 * @return array $characterAttributes Contains all character's data.
 	 */
-	public function getCharacterAttributes($characterId) {
+	public function getAttributes($characterId) {
 		$db = $this->dbConnect();
 		$request = $db->prepare('SELECT id, name, strenght, damages, level, experience FROM game_characters WHERE id = :character_id');
 		$request->bindValue(':character_id', $characterId, \PDO::PARAM_INT);
@@ -62,7 +62,7 @@ class CharacterManager extends \OpenClassrooms\Mini_fight_game\Model\Manager {
 	 *  
 	 * @return object Character An objet filled with data got by the request.
 	 */
-	public function getCharacter($characterId) {
+	public function get($characterId) {
 		$db = $this->dbConnect();
 		$request = $db->prepare('SELECT id, name, strenght, damages, level, experience FROM game_characters WHERE id = :character_id');
 		$request->bindValue(':character_id', $characterId, \PDO::PARAM_INT);
@@ -73,13 +73,31 @@ class CharacterManager extends \OpenClassrooms\Mini_fight_game\Model\Manager {
 		return new Character($data);
 	}
 	/**
-	 * Send a SQL requet to get all data about all Character's objects.
+	 * Send a SQL request to get all data about all Character's objects.
 	 * 
 	 * @return array $characters Contains all Character's objects.
 	 */
-	public function getAllCharacters() {
+	public function getAll() {
 		$db = $this->dbConnect();
 		$request = $db->query('SELECT id, name, strenght, damages, level, experience FROM game_characters ORDER BY name');
+		while ($data = $request->fetch()) {
+			$characters[] = new Character($data);
+		}
+		$request->closeCursor();
+
+		return $characters;
+	}
+	/**
+	 * Send a SQL request to get all data about all Character's objects except one.
+	 * @param string $name The Character to ommit.
+	 * 
+	 * @return array $characters Contains all Character's objects except the one specified.
+	 */
+	public function getAllExcept($name) {
+		$db = $this->dbConnect();
+		$request = $db->prepare('SELECT id, name, strenght, damages, level, experience FROM game_characters WHERE name != :name ORDER BY name');
+		$request->bindValue(':name', $name, \PDO::PARAM_STR);
+		$request->execute();
 		while ($data = $request->fetch()) {
 			$characters[] = new Character($data);
 		}
@@ -94,7 +112,7 @@ class CharacterManager extends \OpenClassrooms\Mini_fight_game\Model\Manager {
 	 * 
 	 * @return void
 	 */
-	public function updateCharacter(Character $charac) {
+	public function update(Character $charac) {
 		$db = $this->dbConnect();
 		$request = $db->prepare('UPDATE game_characters SET strenght = :strenght, damages = :damages, level = :level, experience = :experience WHERE id = :id');
 		$request->bindValue(':id', $charac->id(), \PDO::PARAM_INT);
@@ -104,5 +122,41 @@ class CharacterManager extends \OpenClassrooms\Mini_fight_game\Model\Manager {
 		$request->bindValue(':experience', $charac->experience(), \PDO::PARAM_INT);
 		$request->execute();
 		$request->closeCursor();
+	}
+	/**
+	 * Count the character's number with a SQL request.
+	 * 
+	 * @return string $count number of characters.
+	 */
+	public function count() {
+		$db = $this->dbConnect();
+		$request = $db->query('SELECT COUNT(*) FROM game_characters');
+		$count = (int) $request->fetchColumn();
+		$request->closeCursor();
+
+		return $count;
+	}
+	/**
+	 * Send a SQL request to check if the character exists
+	 * 
+	 * @param int or string $info The id of the character or his name (case sensitive).
+	 * 
+	 * @return bool $exists TRUE if exists and FALSE if not. 
+	 */
+	public function exists($info) {
+		$db = $this->dbConnect();
+		if (is_int($info)) {
+			$request = $db->prepare('SELECT COUNT(*) FROM game_characters WHERE id = :id');
+			$request->bindValue(':id', $info, \PDO::PARAM_INT);
+			$request->execute();
+			$exists = (bool) $request->fetchColumn();
+
+		} elseif (is_string($info)) {
+			$request = $db->prepare('SELECT COUNT(*) FROM game_characters WHERE name = :name');
+			$request->bindValue(':name', $info, \PDO::PARAM_STR);
+			$request->execute();
+			$exists = (bool) $request->fetchColumn();
+		}
+		return $exists;
 	}
 }

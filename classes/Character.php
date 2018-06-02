@@ -13,6 +13,11 @@ class Character {
 	private $_level;
 	private $_experience;
 
+	//CONSTANTS
+	const MYSELF = 1;
+	const CHARACTER_KILLED = 2;
+	const CHARACTER_HIT = 3;
+
 	// CONSTRUCTOR
 	public function __construct(array $attributes) {
 		$this->hydrate($attributes);
@@ -26,6 +31,40 @@ class Character {
 			}
 		}
 	}
+
+	// METHODS
+
+	/**
+	 * Deal the hit.
+	 * 
+	 * Check if the character doesn't it himself.
+	 * Check if the ennemy is injured or killed.
+	 * 
+	 * @param Character $ennemy The ennemy to kill. 
+	 * 
+	 * @return const MYSELF If the carachter hit himself
+	 * @return method getHit() in the other case.
+	 */
+	public function hit(Character $ennemy) {
+		if ($ennemy->id() == $this->id()) {
+			return self::MYSELF;
+		}
+		return $ennemy->getHit();
+	}
+	/**
+	 * Give the hit, and check if it killed the ennemy or not.
+	 * 
+	 * @return const CHARACTER_KILLED if damages is equal or greather than 100
+	 * @return const CHARACTERçHIT if damage is lower than 100.
+	 */
+	public function getHit() {
+		$this->_damages += 5;
+		if ($this->_damages >= 100) {
+			return self::CHARACTER_KILLED;
+		} else 
+			return self::CHARACTER_HIT;
+	}
+
 	// GETTERS
 	/**
 	 * Getter of the _id attribute.
@@ -69,6 +108,7 @@ class Character {
 	public function experience() {
 		return $this->_experience;
 	}
+
 	// SETTERS
 	/**
 	 * Setter and controller of _id.
@@ -77,6 +117,7 @@ class Character {
 	 * that returns everything to a string
 	 * 
 	 * @param int $id Must be an integer strictly positive.
+	 * 
 	 * @return void
 	 */
 	public function setId($id) {
@@ -89,6 +130,7 @@ class Character {
 	/**
 	 * Setter and controller of _name.
 	 * @param int $name Must be a string that lenght is lower than 30 characters. 
+	 * 
 	 * @return void
 	 */
 	public function setName($name) {
@@ -107,6 +149,7 @@ class Character {
 	 * that returns everything to a string
 	 * 
 	 * @param int $name Must be an integer included between 0 et 100.
+	 * 
 	 * @return void
 	 */
 	public function setStrenght($strenght) {
@@ -123,6 +166,7 @@ class Character {
 	 * that returns everything to a string
 	 * 
 	 * @param int $damages Must be an integer included between 0 et 100.
+	 * 
 	 * @return void
 	 */
 	public function setDamages($damages) {
@@ -139,6 +183,7 @@ class Character {
 	 * that returns everything to a string
 	 * 
 	 * @param int $level Must be an integer included between 0 et 100.
+	 * 
 	 * @return void
 	 */
 	public function setLevel($level) {
@@ -155,6 +200,7 @@ class Character {
 	 * that returns everything to a string
 	 * 
 	 * @param int $experience Must be an integer included between 0 et 100.
+	 * 
 	 * @return void
 	 */
 	public function setExperience($experience) {
