@@ -1,11 +1,11 @@
 <?php
-
 namespace OpenClassrooms\Mini_fight_game\Classes;
-
+/**
+ * Contains attributes and methods about the characters
+ */
 class Character {
-	/*
-	 * ATTRIBUTES OF THE CLASS
-	 */
+	
+	//ATTRIBUTES
 	private $_id;
 	private $_name;
 	private $_strenght;
@@ -13,16 +13,11 @@ class Character {
 	private $_level;
 	private $_experience;
 
-	/*
-	 * CONSTRUCTOR
-	 */
-
+	// CONSTRUCTOR
 	public function __construct(array $attributes) {
 		$this->hydrate($attributes);
 	}
-	/*
-	 * HYDRATOR
-	 */
+	// HYDRATOR
 	public function hydrate(array $attributes) {
 		foreach ($attributes as $key => $value) {
 			$method = 'set'.ucfirst($key);
@@ -32,10 +27,7 @@ class Character {
 			}
 		}
 	}
-	/*
-	 * GETTERS OF THE CLASS
-	 */
-
+	// GETTERS
 	/**
 	 * Getter of the _id attribute.
 	 * @return int $_id object's value.
@@ -78,11 +70,7 @@ class Character {
 	public function experience() {
 		return $this->_experience;
 	}
-
-	/*
-	 * SETTERS OF THE CLASS ATTRIBUTES
-	 */
-
+	// SETTERS
 	/**
 	 * Setter and controller of _id.
 	 * 
@@ -94,7 +82,7 @@ class Character {
 	 */
 	public function setId($id) {
 		$id = (int) $id; 
-		if ($id < 0) {
+		if ($id <= 0) {
 			trigger_error('The id must be strictly positive', E_USER_WARNING);
 		}
 		$this->_id = $id;
