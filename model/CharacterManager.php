@@ -21,10 +21,8 @@ class CharacterManager extends \OpenClassrooms\Mini_fight_game\Model\Manager {
 		$request->bindValue(':damages', $charac->damages(), \PDO::PARAM_INT);
 		$request->bindValue(':level', $charac->level(), \PDO::PARAM_INT);
 		$request->bindValue(':experience', $charac->experience(), \PDO::PARAM_INT);
-		var_dump($request);
 		$request->execute();
 		$request->closeCursor();
-		echo $charac->name() . ' had been added';
 	}
 	/**
 	 * Send a SQL request to delete all data of a Character from the database.
