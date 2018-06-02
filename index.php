@@ -1,7 +1,6 @@
 <?php
-require_once('controller/controller.php');
 try {
-	sendCharacterAttributesToTheView(2);
+	require_once('controller/controller.php');
 } catch (Exception $e) {
-	die('Erreur : '.$e->getMessage());
+	die('<h3>Erreur</h3>'.$e->getMessage());
 }
