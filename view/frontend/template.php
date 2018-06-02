@@ -8,5 +8,12 @@
         
     <body>
         <?= $content ?>
+        <form action="" method="post">
+        	<div>
+        		Nom : <input type="text" name="name" maxlength="50" />
+        		<input type="submit" value="Create this character" name="create" />
+        		<input type="submit" value="Use this character" name="use" /> 
+        	</div>
+        </form>
     </body>
 </html>
