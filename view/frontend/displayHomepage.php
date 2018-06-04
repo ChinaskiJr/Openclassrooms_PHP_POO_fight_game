@@ -1,5 +1,4 @@
-<?php $title = 'Let\'s fight !';
-
+<?php
 ob_start(); 
 ?>
 <p>
@@ -18,4 +17,4 @@ ob_start();
 </form>
 <?php
 $content = ob_get_clean();
-require_once('template.php'); 
+require('template.php'); 

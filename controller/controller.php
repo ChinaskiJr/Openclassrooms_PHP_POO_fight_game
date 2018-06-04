@@ -51,7 +51,8 @@ function controlGetCharacter() {
 	if (!isCharacterExist($_POST['name'])) {
 		throw new Exception ('The character doesn\'t exist');
 	} else {
-		getCharacterObject($_POST['name']);
+		$charac = getCharacterObject($_POST['name']);
+		return $charac;
 	}
 }
 /**
@@ -83,31 +84,6 @@ function eraseCharacter(Character $charac) {
 	require_once('view/frontend/displayErasedCharacter.php');
 }
 /**
- * Send character's attributes to the view.
- * 
- * Control if the id is an integer and
- * if $character is an array.
- * 
- * From : Model getCharacterAttributesFromDb() 
- * to : View displayCharacterAttribute.php
- * 
- * @param int $characterId Id of the character.
- * 
- * @return void
- */
-function sendCharacterAttributesToTheView($characterId) {
-	if (!is_int($characterId)) {
-		throw new Exception('The character doesn\'t exist');
-	}
-	$characterManager = new CharacterManager();
-	$characterAttributes = $characterManager->getCharacter($characterId);
-	$character = new Character($characterAttributes);
-	if (!is_a($character, '\OpenClassrooms\Mini_fight_game\Classes\Character')) {
-		throw new Exception('Issue with the database : getCharacterAttributes() method');
-	}
-	require_once('view/frontend/displayCharacterAttribute.php');
-}
-/**
  * Return a required object.
  * 
  * Control if input $characterIs is an Integer and
@@ -127,6 +103,7 @@ function getCharacterObject($info) {
 		throw new Exception('Issue with the database : getCharacter() method');
 		}
 	require_once('view/frontend/displayGetCharacter.php');
+	return $charac;
 	}
 /**
  * Return an array that contains objects of all characters.
@@ -173,7 +150,7 @@ function getAllCharactersExcept($name) {
 			throw new Exception('Issue with the database : getAllCharacters() method. Not all values of the array are Character objects.');
 		} 
 	}
-	return $charactersAttributes;
+	require_once 'view/frontend/displayEnnemies.php';	
 }
 /**
  * Transtype $numberOfCharacters into an integer
