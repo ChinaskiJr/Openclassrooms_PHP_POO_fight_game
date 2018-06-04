@@ -8,10 +8,10 @@ class Character {
 	//ATTRIBUTES
 	private $_id;
 	private $_name;
-	private $_strenght;
-	private $_damages;
-	private $_level;
-	private $_experience;
+	private $_strenght = 0;
+	private $_damages = 0;
+	private $_level = 0;
+	private $_experience = 0;
 
 	//CONSTANTS
 	const MYSELF = 1;
@@ -64,7 +64,20 @@ class Character {
 		} else 
 			return self::CHARACTER_HIT;
 	}
-
+	/**
+	 * Check if the name isn't empty or too long
+	 * 
+	 * @return bool false if it is not valid, true if it is.
+	 */
+	public function validName() {
+		if (empty($this->_name)) {
+			return false;
+		} elseif (strlen($this->_name > 30)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 	// GETTERS
 	/**
 	 * Getter of the _id attribute.

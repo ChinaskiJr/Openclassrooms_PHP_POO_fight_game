@@ -26,7 +26,27 @@ function autoload($class) {
 		}
 }
 spl_autoload_register('autoload');
-
+/**
+ * Control new Character and send it to the model.
+ * 
+ * Check if the name isn't empty and if it doesn't alreay exist.
+ * 
+ * @return void
+ */
+function controlNewCharacter () { 
+	$charac = new Character ([
+		'name' => $_POST['name'],
+	]);
+	if (!$charac->validName()) {
+		unset($charac);
+		throw new Exception('Not a valid name');
+	} else if (isCharacterExist($charac->name())) {
+		unset($charac);
+		throw new Exception('Name already taken');
+	} else {
+		newCharacter($charac);
+	}
+}
 /**
  * Insert a Character object into the database.
  * 
@@ -38,7 +58,7 @@ spl_autoload_register('autoload');
  */
 function newCharacter(Character $charac) {
 	$characterManager = new CharacterManager();
-	$characterManager->ad($charac);
+	$characterManager->add($charac);
 	require_once('view/frontend/displayNewCharacter.php');
 }
 /**
@@ -177,3 +197,4 @@ function isCharacterExist($info) {
 
 	return $characterExist;
 }
+
