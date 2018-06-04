@@ -47,6 +47,13 @@ function controlNewCharacter () {
 		newCharacter($charac);
 	}
 }
+function controlGetCharacter() {
+	if (!isCharacterExist($_POST['name'])) {
+		throw new Exception ('The character doesn\'t exist');
+	} else {
+		getCharacterObject($_POST['name']);
+	}
+}
 /**
  * Insert a Character object into the database.
  * 
@@ -110,16 +117,16 @@ function sendCharacterAttributesToTheView($characterId) {
  * 
  * @return object Character required
  */
-function getCharacterObject($characterId) {
-	if (!is_int($characterId)) {
-		throw new Exception('The character doesn\'t exist');
+function getCharacterObject($info) {
+	if (!is_int($info) && !is_string($info)) {
+		throw new Exception('function getCharacterObjet wait for an integer or a string as a parameter');
 	}
 	$characterManager = new CharacterManager();
-	$characterObject = $characterManager->ge($characterId);
-	if (!is_a($characterObject, '\OpenClassrooms\Mini_fight_game\Classes\Character')) {
+	$charac = $characterManager->get($info);
+	if (!is_a($charac, 'OpenClassrooms\Mini_fight_game\Classes\Character')) {
 		throw new Exception('Issue with the database : getCharacter() method');
 		}
-	return $characterObject;
+	require_once('view/frontend/displayGetCharacter.php');
 	}
 /**
  * Return an array that contains objects of all characters.

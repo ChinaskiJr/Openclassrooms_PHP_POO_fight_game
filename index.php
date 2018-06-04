@@ -4,7 +4,9 @@ try {
 
 	if (isset($_POST['create']) && isset($_POST['name'])) {
 		controlNewCharacter();
-	} else {
+	} else if (isset($_POST['name']) && isset($_POST['use'])) {
+		controlGetCharacter();
+	} else { 
 		require_once('view/frontend/displayHomepage.php');
 	}
 } catch (Exception $e) {
