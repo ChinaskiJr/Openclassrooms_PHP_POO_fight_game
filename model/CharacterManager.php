@@ -62,12 +62,19 @@ class CharacterManager extends \OpenClassrooms\Mini_fight_game\Model\Manager {
 	 *  
 	 * @return object Character An objet filled with data got by the request.
 	 */
-	public function get($characterId) {
+	public function get($info) {
 		$db = $this->dbConnect();
-		$request = $db->prepare('SELECT id, name, strenght, damages, level, experience FROM game_characters WHERE id = :character_id');
-		$request->bindValue(':character_id', $characterId, \PDO::PARAM_INT);
-		$request->execute();
-		$data = $request->fetch();
+		if (is_int($info)) {
+			$request = $db->prepare('SELECT id, name, strenght, damages, level, experience FROM game_characters WHERE id = :character_id');
+			$request->bindValue(':character_id', $info, \PDO::PARAM_INT);
+			$request->execute();
+			$data = $request->fetch();
+		} else {
+			$request = $db->prepare('SELECT id, name, strenght, damages, level, experience FROM game_characters WHERE name = :character_name');
+			$request->bindValue(':character_name', $info, \PDO::PARAM_STR);
+			$request->execute();
+			$data = $request->fetch();
+		}
 		$request->closeCursor();
 
 		return new Character($data);
