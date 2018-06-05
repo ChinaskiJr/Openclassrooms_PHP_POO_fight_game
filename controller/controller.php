@@ -11,7 +11,7 @@ use \OpenClassrooms\Mini_fight_game\Model\CharacterManager as CharacterManager;
  * 
  * @return void
  */
-function autoload($class) {
+function autoload($class) {	
 	$class = explode('\\', $class);
 	$class = end($class);
 	if (file_exists($class . '.php')) {
@@ -93,8 +93,11 @@ function controlHitCharacter($yourCharac, $infoEnnemy) {
 				$characterManager->update($characEnnemy);
 				break;
 			case Character::CHARACTER_KILLED :
-				echo '<i>You killed ' . htmlspecialchars($characEnnemy->name()) . 'and he was crying. You win 10 xp !</i><br /><hr />';
+				$gainXp = $yourCharac->gainXP($characEnnemy->level());
+				$characterManager->update($yourCharac);
+				echo '<i>You killed ' . htmlspecialchars($characEnnemy->name()) . ' and he was crying. You win ' . $gainXp . ' xp !</i><br /><hr />';
 				$characterManager->delete($characEnnemy);
+
 				break;
 		}
 	}
