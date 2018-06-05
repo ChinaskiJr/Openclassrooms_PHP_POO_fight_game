@@ -107,20 +107,6 @@ function newCharacter(Character $charac) {
 	require_once('view/frontend/displayNewCharacter.php');
 }
 /**
- * Erase a character from the database
- * 
- * Send a confirmation to the view.
- * 
- * @param Character $charac The object to delete
-
- * @return type
- */
-function eraseCharacter(Character $charac) {
-	$characterManager = new CharacterManager();
-	$characterManager->delet($charac);
-	require_once('view/frontend/displayErasedCharacter.php');
-}
-/**
  * Return a required object and send his attributes to the view.
  * 
  * Control if input $characterIs is an Integer and
