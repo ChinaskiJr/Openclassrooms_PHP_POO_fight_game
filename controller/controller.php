@@ -147,7 +147,7 @@ function getAllCharacters() {
 			throw new Exception('Issue with the database : getAllCharacters() method. Not all values of the array are Character objects.');
 		} 
 	}
-	return $charactersAttributes;
+	require_once('view/frontend/displayAllCharacters.php');
 }
 /**
  * Return an array that contains objects of all characters except one.

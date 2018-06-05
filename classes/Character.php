@@ -10,7 +10,7 @@ class Character {
 	private $_name;
 	private $_strenght = 0;
 	private $_damages = 0;
-	private $_level = 0;
+	private $_level = 1;
 	private $_experience = 0;
 
 	//CONSTANTS
