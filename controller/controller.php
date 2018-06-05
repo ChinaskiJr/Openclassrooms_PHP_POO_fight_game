@@ -28,7 +28,6 @@ function autoload($class) {
 spl_autoload_register('autoload');
 
 session_start();
-
 if (isset($_SESSION['charac'])) {
 	$sessionCharac = $_SESSION['charac'];
 }
@@ -69,6 +68,15 @@ function controlGetCharacter($info) {
 		$_SESSION['charac'] = $character;
 	}
 }
+/**
+ * Control the value of the parameters and send the result to the view
+ * 
+ * @param Character $yourCharac An objet Character represents the hitter
+ * 
+ * @param int or string $înfoEnnemy The id or the name of the hit character
+ * 
+ * @return void
+ */
 function controlHitCharacter($yourCharac, $infoEnnemy) {
 	if (!isCharacterExist($infoEnnemy)) {
 		throw new Exception ('The character you want to hit doesn\'t exist');
@@ -81,15 +89,14 @@ function controlHitCharacter($yourCharac, $infoEnnemy) {
 				echo 'Why would you want to hit yourself ?';
 				break;
 			case Character::CHARACTER_HIT :
-				echo 'You hit ' . htmlspecialchars($characEnnemy->name()) . ' and you hit him hard. <br /><br />';
+				echo '<i>You hit ' . htmlspecialchars($characEnnemy->name()) . ' and you hit him hard.</i> <br /><hr />';
 				$characterManager->update($characEnnemy);
 				break;
 			case Character::CHARACTER_KILLED :
-				echo 'You killed ' . htmlspecialchars($characEnnemy->name()) . 'and he was crying. You win 10 xp !<br /><br />';
+				echo '<i>You killed ' . htmlspecialchars($characEnnemy->name()) . 'and he was crying. You win 10 xp !</i><br /><hr />';
 				$characterManager->delete($characEnnemy);
 				break;
 		}
-
 	}
 }
 /**
@@ -104,6 +111,7 @@ function controlHitCharacter($yourCharac, $infoEnnemy) {
 function newCharacter(Character $charac) {
 	$characterManager = new CharacterManager();
 	$characterManager->add($charac);
+	$_SESSION['charac'] = $characterManager->get($charac->name());
 	require_once('view/frontend/displayNewCharacter.php');
 }
 /**
@@ -192,7 +200,7 @@ function countCharacters() {
  * Control that the param is a string or an integer
  * 
  * @param int or string $info The id of the character or his name (case sensitive).
-
+ *
  * @return bool $exists TRUE if exists and FALSE if not. 
  */
 function isCharacterExist($info) {
