@@ -17,8 +17,8 @@ try {
 	} else if (isset($_GET['hit']) && !isset($_SESSION['charac'])) {
 		header('Location: .');
 	} else if (isset($_GET['hit'])) {
-		controlGetCharacter($sessionCharac->id());
 		controlHitCharacter($sessionCharac, (int) $_GET['hit']);
+		controlGetCharacter($sessionCharac->id());
 		getAllCharactersExcept($sessionCharac->name());
 	} else { 
 		require_once('view/frontend/displayHomepage.php');

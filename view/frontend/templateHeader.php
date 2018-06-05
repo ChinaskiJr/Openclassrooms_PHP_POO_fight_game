@@ -7,3 +7,11 @@
     </head>
         
     <body>
+    	<?php
+    	if (isset($_SESSION['charac'])) {
+    		echo 'Playing with ' . htmlspecialchars($_SESSION['charac']->name()) . ' - <a href="?disconnect=1">Disconnect</a><hr />';
+    	} 
+    	// Display the header even if you just created the character 
+    	elseif (isset($_POST['name'])) {
+    		echo 'Playing with ' . htmlspecialchars($_POST['name']) . ' - <a href="?disconnect=1">Disconnect</a><hr />';
+    	}
