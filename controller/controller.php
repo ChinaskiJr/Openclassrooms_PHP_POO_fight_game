@@ -89,7 +89,8 @@ function controlHitCharacter($yourCharac, $infoEnnemy) {
 				echo 'Why would you want to hit yourself ?';
 				break;
 			case Character::CHARACTER_HIT :
-				echo '<i>You hit ' . htmlspecialchars($characEnnemy->name()) . ' and you hit him hard.</i> <br /><hr />';
+			$damages = $yourCharac->strenght() + 5;
+				echo '<i>You hit ' . htmlspecialchars($characEnnemy->name()) . ' and you hit him hard (' . $damages . ').</i> <br /><hr />';
 				$characterManager->update($characEnnemy);
 				break;
 			case Character::CHARACTER_KILLED :
@@ -97,7 +98,6 @@ function controlHitCharacter($yourCharac, $infoEnnemy) {
 				$characterManager->update($yourCharac);
 				echo '<i>You killed ' . htmlspecialchars($characEnnemy->name()) . ' and he was crying. You win ' . $gainXp . ' xp !</i><br /><hr />';
 				$characterManager->delete($characEnnemy);
-
 				break;
 		}
 	}
@@ -176,8 +176,8 @@ function getAllCharactersExcept($name) {
 		throw new Exception('getAllCharactersExcept : $name must be a string');
 	}
 	$charactersAttributes = $characterManager->getAllExcept($name);
-	if (!is_array($charactersAttributes)) {
-		throw new Exception('Issue with the database : getAllCharacters() method. It returns no array');
+	if (is_null($charactersAttributes)) {
+		return;
 	}
 	foreach ($charactersAttributes as $key => $value) {
 		if (!is_a($value, '\OpenClassrooms\Mini_fight_game\Classes\Character')) {

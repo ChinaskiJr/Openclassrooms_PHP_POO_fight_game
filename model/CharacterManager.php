@@ -101,6 +101,7 @@ class CharacterManager extends \OpenClassrooms\Mini_fight_game\Model\Manager {
 	 * @return array $characters Contains all Character's objects except the one specified.
 	 */
 	public function getAllExcept($name) {
+		$characters = null;
 		$db = $this->dbConnect();
 		$request = $db->prepare('SELECT id, name, strenght, damages, level, experience FROM game_characters WHERE name != :name ORDER BY name');
 		$request->bindValue(':name', $name, \PDO::PARAM_STR);
@@ -109,6 +110,11 @@ class CharacterManager extends \OpenClassrooms\Mini_fight_game\Model\Manager {
 			$characters[] = new Character($data);
 		}
 		$request->closeCursor();
+
+		if(is_null($characters)) {
+			echo 'You\'re the final winner !';
+			return;
+		}
 
 		return $characters;
 	}

@@ -49,16 +49,18 @@ class Character {
 		if ($ennemy->id() == $this->id()) {
 			return self::MYSELF;
 		}
-		return $ennemy->getHit();
+		return $ennemy->getHit($this->_strenght);
 	}
 	/**
 	 * Give the hit, and check if it killed the ennemy or not.
 	 * 
+	 * @param int $strenghtHit The strenght of the objects that hit
+	 * 
 	 * @return const CHARACTER_KILLED if damages is equal or greather than 100
 	 * @return const CHARACTERçHIT if damage is lower than 100.
 	 */
-	public function getHit() {
-		$this->_damages += 5;
+	public function getHit($strenghtHit) {
+		$this->_damages += (5 + $strenghtHit);
 		if ($this->_damages >= 100) {
 			return self::CHARACTER_KILLED;
 		} else 
@@ -86,28 +88,28 @@ class Character {
 	 * @return int $xpGain The amount of XP's gain.
 	 */
 	public function gainXP($levelKilled) {
-		for ($i = 1 ; $i < 10 ; $i++) {
+		for ($i = 1 ; $i <= 10 ; $i++) {
 			if ($levelKilled == $i)
 				$xpGain = 10 * (pow(2, $i - 1));
 		}
 		$experience = $this->_experience + $xpGain;
-		echo 'first xp ' . var_dump($experience) . '<br />';
+		if ($this->_level >= 10) {
+			$this->_level = 10;
+			$this->_experience = 0;
+			return;
+		}
 		for ($i = 1 ; $i < 10 ; $i++) {
 			if ($this->_level == $i) {
 				if ($experience >= (100 * $i)) {
-					echo 'this level ' . var_dump($this->_level) . '<br />';
 					$level = (int) floor($experience / (100 * $i));
-					echo 'level ' . var_dump($level) . '<br />';
 					$experience = $experience - $level * (100 * $i);
-					echo 'experience ' . var_dump($experience) . '<br />';
 				}
 			}
 		}
 		if (isset($level)) {
-			echo 'final level :' . var_dump($this->_level + $level);
 			$this->setLevel($this->_level + $level);
+			$this->setStrenght($this->_strenght + ($level * 2));
 		}
-		echo 'final xp :' . var_dump($experience);
 		$this->setExperience($experience);
 		return $xpGain;
 	}
@@ -234,7 +236,7 @@ class Character {
 	 */
 	public function setLevel($level) {
 		$level = (int) $level; 
-		if ($level < 0 || $level > 10) {
+		if ($level < 0) {
 			throw new Exception('The level must be included between 0 and 10');
 		}
 		$this->_level = $level;
