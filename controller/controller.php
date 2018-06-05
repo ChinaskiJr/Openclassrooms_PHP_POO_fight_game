@@ -26,6 +26,13 @@ function autoload($class) {
 		}
 }
 spl_autoload_register('autoload');
+
+session_start();
+
+if (isset($_SESSION['charac'])) {
+	$sessionCharac = $_SESSION['charac'];
+}
+
 /**
  * Control new Character and send it to the model.
  * 
@@ -47,12 +54,28 @@ function controlNewCharacter () {
 		newCharacter($charac);
 	}
 }
-function controlGetCharacter() {
-	if (!isCharacterExist($_POST['name'])) {
+/**
+ * Control the chosen character and stock in a variable's session.
+ * 
+ * @param int or string $info Id or name of the caracter you get.
+ *
+ * @return void
+ */
+function controlGetCharacter($info) {
+	if (!isCharacterExist($info)) {
 		throw new Exception ('The character doesn\'t exist');
 	} else {
-		$charac = getCharacterObject($_POST['name']);
-		return $charac;
+		$character = getCharacterObject($info);
+		$_SESSION['charac'] = $character;
+	}
+}
+function controlHitCharacter($yourCharac, $infoEnnemy) {
+	if (!isCharacterExist($infoEnnemy)) {
+		throw new Exception ('The character doesn\'t exist');
+	} else {
+		$characterManager = new CharacterManager();
+		$characEnnemy = $characterManager->get($infoEnnemy);
+		$yourCharac->hit($characEnnemy);
 	}
 }
 /**
@@ -84,7 +107,7 @@ function eraseCharacter(Character $charac) {
 	require_once('view/frontend/displayErasedCharacter.php');
 }
 /**
- * Return a required object.
+ * Return a required object and send his attributes to the view.
  * 
  * Control if input $characterIs is an Integer and
  * if output $characterObject is a Character object.
@@ -181,4 +204,6 @@ function isCharacterExist($info) {
 
 	return $characterExist;
 }
-
+function hitEnnemy($info) {
+	$characterManager = new CharacterManager();
+}
