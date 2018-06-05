@@ -71,11 +71,25 @@ function controlGetCharacter($info) {
 }
 function controlHitCharacter($yourCharac, $infoEnnemy) {
 	if (!isCharacterExist($infoEnnemy)) {
-		throw new Exception ('The character doesn\'t exist');
+		throw new Exception ('The character you want to hit doesn\'t exist');
 	} else {
 		$characterManager = new CharacterManager();
 		$characEnnemy = $characterManager->get($infoEnnemy);
-		$yourCharac->hit($characEnnemy);
+		$resultOfFight = $yourCharac->hit($characEnnemy);
+		switch($resultOfFight) {
+			case Character::MYSELF :
+				echo 'Why would you want to hit yourself ?';
+				break;
+			case Character::CHARACTER_HIT :
+				echo 'You hit ' . htmlspecialchars($characEnnemy->name()) . ' and you hit him hard. <br /><br />';
+				$characterManager->update($characEnnemy);
+				break;
+			case Character::CHARACTER_KILLED :
+				echo 'You killed ' . htmlspecialchars($characEnnemy->name()) . 'and he was crying. You win 10 xp !<br /><br />';
+				$characterManager->delete($characEnnemy);
+				break;
+		}
+
 	}
 }
 /**
@@ -203,7 +217,4 @@ function isCharacterExist($info) {
 	$characterExist = $characterManager->exists($info);
 
 	return $characterExist;
-}
-function hitEnnemy($info) {
-	$characterManager = new CharacterManager();
 }

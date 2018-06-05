@@ -8,7 +8,6 @@ try {
 		controlGetCharacter($_POST['name']);
 		getAllCharactersExcept($sessionCharac->name());
 	} else if (isset($_GET['hit'])) {
-		// GET YOURPERSO WITH SESSION
 		controlHitCharacter($sessionCharac, (int) $_GET['hit']);
 		controlGetCharacter($sessionCharac->id());
 		getAllCharactersExcept($sessionCharac->name());
