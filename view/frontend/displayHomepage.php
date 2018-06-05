@@ -14,6 +14,8 @@ ob_start();
         <input type="submit" value="Create this character" name="create" />
         <input type="submit" value="Use this character" name="use" /> 
     </div>
+    <br />
+    <br />
 </form>
 <?php
 $content = ob_get_clean();

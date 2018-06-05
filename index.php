@@ -13,6 +13,7 @@ try {
 		getAllCharactersExcept($sessionCharac->name());
 	} else { 
 		require_once('view/frontend/displayHomepage.php');
+		getAllCharacters();
 	}
 	require_once 'view/frontend/templateFooter.php';
 } catch (Exception $e) {
