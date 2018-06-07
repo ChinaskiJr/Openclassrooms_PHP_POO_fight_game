@@ -1,9 +1,9 @@
 # Openclassrooms_PHP_POO_fight_game
 
-### What is is ? 
+### What is it ? 
 
 Program written for the Openclassrooms course on the object oriented programmation with PHP. 
-It require a SQL file that you can create with this MySQL instruction : 
+It requires a SQL file that you can create with this MySQL instruction : 
 
 ```sql
 CREATE TABLE IF NOT EXISTS `characters` (
